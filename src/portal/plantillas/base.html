@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ titulo }} · Portal de Atención — UPB</title>
+    <link rel="stylesheet" href="/estaticos/estilos.css">
+</head>
+<body>
+    <header class="cabecera">
+        <div class="contenedor cabecera__interior">
+            <a class="marca" href="/">
+                <span class="marca__sigla">UPB</span>
+                <span class="marca__texto">Portal de Atención al Estudiante</span>
+            </a>
+            <nav class="navegacion">
+                <a href="/" class="{{ 'activo' if request.url.path == '/' }}">Panel</a>
+                <a href="/solicitudes"
+                   class="{{ 'activo' if request.url.path.startswith('/solicitudes') }}">Solicitudes</a>
+                <a href="/solicitudes/nueva" class="boton boton--primario">Nueva solicitud</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="contenedor principal">
+        {% block contenido %}{% endblock %}
+    </main>
+
+    <footer class="pie">
+        <div class="contenedor">
+            <p>Universidad Privada Boliviana · Dirección de Tecnologías de la Información</p>
+        </div>
+    </footer>
+
+    <script src="/estaticos/app.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

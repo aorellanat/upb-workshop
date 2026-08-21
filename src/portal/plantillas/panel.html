@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<h1>Panel de control</h1>
+<p class="subtitulo">Estado general de la atención a estudiantes.</p>
+
+<section class="tarjetas">
+    <article class="tarjeta">
+        <span class="tarjeta__etiqueta">Total de solicitudes</span>
+        <strong class="tarjeta__cifra">{{ metricas.total }}</strong>
+    </article>
+    <article class="tarjeta">
+        <span class="tarjeta__etiqueta">Abiertas</span>
+        <strong class="tarjeta__cifra">{{ metricas.abiertas }}</strong>
+    </article>
+    <article class="tarjeta tarjeta--alerta">
+        <span class="tarjeta__etiqueta">SLA vencido</span>
+        <strong class="tarjeta__cifra">{{ metricas.vencidas }}</strong>
+        <a class="tarjeta__enlace" href="/solicitudes?estado=ABIERTAS">Ver abiertas</a>
+    </article>
+    <article class="tarjeta tarjeta--aviso">
+        <span class="tarjeta__etiqueta">En riesgo</span>
+        <strong class="tarjeta__cifra">{{ metricas.en_riesgo }}</strong>
+    </article>
+    <article class="tarjeta">
+        <span class="tarjeta__etiqueta">Cerradas</span>
+        <strong class="tarjeta__cifra">{{ metricas.cerradas }}</strong>
+    </article>
+</section>
+
+<div class="rejilla-dos">
+    <section class="panel">
+        <h2>Por estado</h2>
+        <ul class="barras">
+            {% for codigo, etiqueta in etiquetas_estado.items() %}
+                {% set cantidad = metricas.por_estado.get(codigo, 0) %}
+                <li class="barra">
+                    <a class="barra__etiqueta" href="/solicitudes?estado={{ codigo }}">{{ etiqueta }}</a>
+                    <div class="barra__pista">
+                        <div class="barra__relleno barra__relleno--{{ codigo|lower }}"
+                             style="width: {{ (cantidad / metricas.total * 100) if metricas.total else 0 }}%"></div>
+                    </div>
+                    <span class="barra__valor">{{ cantidad }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="panel">
+        <h2>Por prioridad</h2>
+        <ul class="barras">
+            {% for codigo, etiqueta in etiquetas_prioridad.items() %}
+                {% set cantidad = metricas.por_prioridad.get(codigo, 0) %}
+                <li class="barra">
+                    <a class="barra__etiqueta" href="/solicitudes?prioridad={{ codigo }}">{{ etiqueta }}</a>
+                    <div class="barra__pista">
+                        <div class="barra__relleno barra__relleno--prioridad-{{ codigo|lower }}"
+                             style="width: {{ (cantidad / metricas.total * 100) if metricas.total else 0 }}%"></div>
+                    </div>
+                    <span class="barra__valor">{{ cantidad }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
+
+<section class="panel">
+    <h2>Solicitudes por categoría</h2>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>Categoría</th>
+                <th class="numero">Total</th>
+                <th class="numero">Abiertas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in metricas.por_categoria %}
+                <tr>
+                    <td>{{ fila.categoria }}</td>
+                    <td class="numero">{{ fila.total }}</td>
+                    <td class="numero">{{ fila.abiertas }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section class="panel">
+    <h2>Carga por funcionario</h2>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>Funcionario</th>
+                <th>Área</th>
+                <th class="numero">Solicitudes abiertas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in metricas.carga_por_funcionario %}
+                <tr>
+                    <td>{{ fila.funcionario }}</td>
+                    <td>{{ fila.area }}</td>
+                    <td class="numero">{{ fila.abiertas }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<nav class="migas"><a href="/solicitudes">Solicitudes</a> / {{ solicitud.codigo }}</nav>
+
+<div class="encabezado-detalle">
+    <div>
+        <h1>{{ solicitud.asunto }}</h1>
+        <p class="subtitulo mono">{{ solicitud.codigo }}</p>
+    </div>
+    <span class="insignia insignia--grande insignia--{{ solicitud.estado|lower }}">
+        {{ etiquetas_estado[solicitud.estado] }}
+    </span>
+</div>
+
+<div class="rejilla-detalle">
+    <div>
+        <section class="panel">
+            <h2>Descripción</h2>
+            <p class="descripcion">{{ solicitud.descripcion }}</p>
+        </section>
+
+        <section class="panel">
+            <h2>Seguimiento</h2>
+            {% if solicitud.seguimientos %}
+                <ol class="linea-tiempo">
+                    {% for seguimiento in solicitud.seguimientos %}
+                        <li class="linea-tiempo__item {{ 'linea-tiempo__item--interno' if seguimiento.es_interno }}">
+                            <div class="linea-tiempo__cabecera">
+                                <strong>{{ seguimiento.autor }}</strong>
+                                {% if seguimiento.es_interno %}
+                                    <span class="etiqueta-interna">Nota interna</span>
+                                {% endif %}
+                                <time class="mono">{{ seguimiento.creado_en.strftime('%d/%m/%Y %H:%M') }}</time>
+                            </div>
+                            <p>{{ seguimiento.mensaje }}</p>
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p class="vacio">Todavía no hay seguimientos.</p>
+            {% endif %}
+
+            <form class="formulario-seguimiento" data-solicitud="{{ solicitud.id }}">
+                <label>
+                    Tu nombre
+                    <input type="text" name="autor" required minlength="2" placeholder="Nombre y apellido">
+                </label>
+                <label>
+                    Mensaje
+                    <textarea name="mensaje" required minlength="2" rows="3"
+                              placeholder="Escribe una actualización para el estudiante"></textarea>
+                </label>
+                <label class="casilla">
+                    <input type="checkbox" name="es_interno">
+                    Nota interna (no visible para el estudiante)
+                </label>
+                <button type="submit" class="boton boton--primario">Agregar seguimiento</button>
+                <p class="mensaje-formulario" role="status"></p>
+            </form>
+        </section>
+    </div>
+
+    <aside>
+        <section class="panel">
+            <h2>Datos</h2>
+            <dl class="definiciones">
+                <dt>Estudiante</dt>
+                <dd>
+                    {{ solicitud.estudiante_nombre }}<br>
+                    <span class="mono tenue">{{ solicitud.estudiante_codigo }}</span><br>
+                    <span class="tenue">{{ solicitud.estudiante_correo }}</span>
+                </dd>
+
+                <dt>Categoría</dt>
+                <dd>{{ solicitud.categoria_nombre }}</dd>
+
+                <dt>Prioridad</dt>
+                <dd>
+                    <span class="prioridad prioridad--{{ solicitud.prioridad|lower }}">
+                        {{ etiquetas_prioridad[solicitud.prioridad] }}
+                    </span>
+                </dd>
+
+                <dt>Asignada a</dt>
+                <dd>{{ solicitud.funcionario_nombre or 'Sin asignar' }}</dd>
+
+                <dt>Registrada</dt>
+                <dd class="mono">{{ solicitud.creada_en.strftime('%d/%m/%Y %H:%M') }}</dd>
+
+                {% if solicitud.cerrada_en %}
+                    <dt>Cerrada</dt>
+                    <dd class="mono">{{ solicitud.cerrada_en.strftime('%d/%m/%Y %H:%M') }}</dd>
+                {% endif %}
+            </dl>
+        </section>
+
+        {% if solicitud.sla %}
+            <section class="panel">
+                <h2>SLA</h2>
+                <p class="sla sla--grande sla--{{ 'vencida' if solicitud.sla.vencida
+                                                   else ('riesgo' if solicitud.sla.en_riesgo else 'ok') }}">
+                    {{ solicitud.sla.etiqueta }}
+                </p>
+                <dl class="definiciones">
+                    <dt>Límite</dt>
+                    <dd>{{ solicitud.sla.horas_limite }} horas hábiles</dd>
+                    <dt>Transcurrido</dt>
+                    <dd>{{ solicitud.sla.horas_transcurridas }} horas hábiles</dd>
+                    <dt>Restante</dt>
+                    <dd>{{ solicitud.sla.horas_restantes }} horas hábiles</dd>
+                </dl>
+                <div class="barra__pista">
+                    <div class="barra__relleno barra__relleno--sla"
+                         style="width: {{ [solicitud.sla.porcentaje_consumido * 100, 100]|min }}%"></div>
+                </div>
+            </section>
+        {% endif %}
+
+        <section class="panel">
+            <h2>Acciones</h2>
+            {% if estados_alcanzables %}
+                <form class="formulario-estado" data-solicitud="{{ solicitud.id }}">
+                    <label>
+                        Tu nombre
+                        <input type="text" name="autor" required minlength="2" placeholder="Nombre y apellido">
+                    </label>
+                    <label>
+                        Nuevo estado
+                        <select name="estado" required>
+                            {% for destino in estados_alcanzables %}
+                                <option value="{{ destino }}">{{ etiquetas_estado[destino] }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>
+                        Comentario (opcional)
+                        <textarea name="comentario" rows="2" placeholder="Motivo del cambio"></textarea>
+                    </label>
+                    <button type="submit" class="boton boton--primario">Cambiar estado</button>
+                    <p class="mensaje-formulario" role="status"></p>
+                </form>
+            {% else %}
+                <p class="vacio">
+                    Esta solicitud está en un estado final. No admite más cambios.
+                </p>
+            {% endif %}
+        </section>
+    </aside>
+</div>
+{% endblock %}

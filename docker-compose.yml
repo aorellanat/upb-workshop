@@ -1,0 +1,42 @@
+# `docker compose up -d` levanta todo: base de datos y aplicación. No hace falta instalar
+# Python ni uv en tu máquina. El código en `src/` se monta como volumen dentro del
+# contenedor `app`, así que al editar y guardar un archivo, el servidor se recarga solo
+# — igual que si corrieras la app en local.
+
+services:
+  oracle:
+    image: gvenzl/oracle-free:23-slim-faststart
+    container_name: portal_oracle
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:-oracle_upb_2026}
+      APP_USER: ${PORTAL_BD_USUARIO:-portal}
+      APP_USER_PASSWORD: ${PORTAL_BD_CLAVE:-portal_upb_2026}
+    volumes:
+      - oracle_datos:/opt/oracle/oradata
+    healthcheck:
+      # healthcheck.sh viene incluido en la imagen de gvenzl.
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  app:
+    build: .
+    container_name: portal_app
+    depends_on:
+      oracle:
+        condition: service_healthy
+    environment:
+      PORTAL_BD_DSN: oracle:1521/FREEPDB1
+      PORTAL_BD_USUARIO: ${PORTAL_BD_USUARIO:-portal}
+      PORTAL_BD_CLAVE: ${PORTAL_BD_CLAVE:-portal_upb_2026}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+
+volumes:
+  oracle_datos:

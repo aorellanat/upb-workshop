@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<nav class="migas"><a href="/solicitudes">Solicitudes</a> / Nueva</nav>
+
+<h1>Registrar una solicitud</h1>
+<p class="subtitulo">La solicitud queda en estado «Recibida» hasta que la mesa de ayuda la revise.</p>
+
+<form class="formulario-nueva panel" id="formulario-nueva-solicitud">
+    <label>
+        Estudiante
+        <select name="estudiante_id" required>
+            <option value="">Selecciona un estudiante</option>
+            {% for estudiante in estudiantes %}
+                <option value="{{ estudiante.id }}">
+                    {{ estudiante.apellidos }}, {{ estudiante.nombres }} ({{ estudiante.codigo_estudiante }})
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Categoría
+        <select name="categoria_id" required>
+            <option value="">Selecciona una categoría</option>
+            {% for categoria in categorias %}
+                <option value="{{ categoria.id }}" data-sla="{{ categoria.sla_horas }}">
+                    {{ categoria.nombre }} — SLA {{ categoria.sla_horas }} h
+                </option>
+            {% endfor %}
+        </select>
+        <small class="ayuda" id="ayuda-sla"></small>
+    </label>
+
+    <label>
+        Prioridad
+        <select name="prioridad">
+            {% for codigo, etiqueta in etiquetas_prioridad.items() %}
+                <option value="{{ codigo }}" {{ 'selected' if codigo == 'MEDIA' }}>{{ etiqueta }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Asunto
+        <input type="text" name="asunto" required minlength="5" maxlength="200"
+               placeholder="Resume el problema en una línea">
+    </label>
+
+    <label>
+        Descripción
+        <textarea name="descripcion" required minlength="10" maxlength="2000" rows="6"
+                  placeholder="Explica qué ocurre, desde cuándo y qué intentaste"></textarea>
+    </label>
+
+    <div class="formulario__acciones">
+        <button type="submit" class="boton boton--primario">Registrar solicitud</button>
+        <a href="/solicitudes" class="boton boton--plano">Cancelar</a>
+    </div>
+    <p class="mensaje-formulario" role="status"></p>
+</form>
+{% endblock %}

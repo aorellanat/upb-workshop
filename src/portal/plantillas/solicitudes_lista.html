@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<h1>Solicitudes</h1>
+<p class="subtitulo">{{ solicitudes|length }} solicitud(es) según los filtros aplicados.</p>
+
+<form class="filtros" method="get" action="/solicitudes">
+    <label>
+        Estado
+        <select name="estado">
+            <option value="">Todos</option>
+            <option value="ABIERTAS" {{ 'selected' if filtros.estado == 'ABIERTAS' }}>Solo abiertas</option>
+            {% for codigo, etiqueta in etiquetas_estado.items() %}
+                <option value="{{ codigo }}" {{ 'selected' if filtros.estado == codigo }}>{{ etiqueta }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Categoría
+        <select name="categoria_id">
+            <option value="">Todas</option>
+            {% for categoria in categorias %}
+                <option value="{{ categoria.id }}"
+                        {{ 'selected' if filtros.categoria_id == categoria.id }}>{{ categoria.nombre }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Prioridad
+        <select name="prioridad">
+            <option value="">Todas</option>
+            {% for codigo, etiqueta in etiquetas_prioridad.items() %}
+                <option value="{{ codigo }}" {{ 'selected' if filtros.prioridad == codigo }}>{{ etiqueta }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label class="filtros__busqueda">
+        Buscar
+        <input type="search" name="busqueda" value="{{ filtros.busqueda }}"
+               placeholder="Asunto o código (SOL-2026-0001)">
+    </label>
+
+    <div class="filtros__acciones">
+        <button type="submit" class="boton boton--primario">Filtrar</button>
+        <a href="/solicitudes" class="boton boton--plano">Limpiar</a>
+    </div>
+</form>
+
+{% if solicitudes %}
+    <table class="tabla tabla--solicitudes">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Asunto</th>
+                <th>Estudiante</th>
+                <th>Categoría</th>
+                <th>Estado</th>
+                <th>Prioridad</th>
+                <th>SLA</th>
+                <th>Registrada</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for solicitud in solicitudes %}
+                <tr onclick="window.location='/solicitudes/{{ solicitud.id }}'" class="fila-enlazada">
+                    <td class="mono">{{ solicitud.codigo }}</td>
+                    <td>{{ solicitud.asunto }}</td>
+                    <td>{{ solicitud.estudiante_nombre }}</td>
+                    <td>{{ solicitud.categoria_nombre }}</td>
+                    <td>
+                        <span class="insignia insignia--{{ solicitud.estado|lower }}">
+                            {{ etiquetas_estado[solicitud.estado] }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="prioridad prioridad--{{ solicitud.prioridad|lower }}">
+                            {{ etiquetas_prioridad[solicitud.prioridad] }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if solicitud.sla %}
+                            <span class="sla sla--{{ 'vencida' if solicitud.sla.vencida
+                                                     else ('riesgo' if solicitud.sla.en_riesgo else 'ok') }}">
+                                {{ solicitud.sla.etiqueta }}
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td class="mono">{{ solicitud.creada_en.strftime('%d/%m/%Y %H:%M') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="vacio">No hay solicitudes que coincidan con los filtros.</p>
+{% endif %}
+{% endblock %}
