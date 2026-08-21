@@ -1,53 +1,298 @@
-# Portal de Atención al Estudiante — UPB
+# Taller de Claude Code — Portal de Atención al Estudiante
 
-Aplicación de práctica diseñada para el taller de cómo usar **Claude Code** en el desarrollo real.
+Universidad Privada Boliviana
 
-Una aplicación FastAPI + Oracle que gestiona solicitudes de atención de estudiantes: registro, clasificación, asignación y seguimiento de SLA. El código contiene defectos intencionales para que practiques encontrarlos y repararlos con Claude Code.
+Durante las próximas horas vas a trabajar sobre una aplicación real: FastAPI,
+Oracle y una interfaz web. **La aplicación tiene problemas a propósito.** Encontrarlos y
+resolverlos con Claude Code es exactamente el ejercicio.
 
-> **Antes de usar este código:** Empieza por [`taller/GUIA.md`](taller/GUIA.md) — es una guía con 6 ejercicios progresivos.
+No hace falta que sepas FastAPI ni Oracle. Justamente de eso se trata: así es como llega
+un sistema que heredaste de otro equipo.
 
----
-
-## Requisitos
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) — es lo único que necesitas.
-
-No hace falta instalar Python ni `uv`: la aplicación corre dentro de un contenedor que ya
-trae todo lo necesario.
+Solo necesitas [Docker Desktop](https://www.docker.com/products/docker-desktop/) — no
+necesitas instalar nada más, todo corre dentro de un contenedor.
 
 ---
 
-## Guía rápida
+## Agenda
 
-**Verifica que todo esté listo:**
+| # | Bloque |
+|---|---|
+| 0 | Puesta en marcha |
+| 1 | Entender código que no escribiste |
+| 2 | CLAUDE.md |
+| 3 | Encontrar un bug de verdad |
+| 4 | Una funcionalidad de punta a punta |
+| 5 | Revisión de código |
+| 6 | Git |
+
+---
+
+## Ejercicio 0 — Puesta en marcha
+
+**Meta:** tener la aplicación corriendo y Claude Code abierto en el proyecto.
 
 ```bash
-python verificar_entorno.py  # funciona en Windows, Mac, Linux
+docker compose up -d --build   # base de datos + aplicación
+docker compose exec app uv run inicializar-bd   # solo la primera vez, si faltan los datos
 ```
 
-**Luego levanta todo (base de datos + aplicación):**
+No necesitas instalar nada más: todo corre dentro de Docker. El código se monta como
+volumen, así que al editar y guardar un archivo, el servidor se recarga solo.
+
+Abre <http://localhost:8000> y date una vuelta: panel, listado, detalle de una solicitud.
+
+### Conéctate a Claude Code
+
+En **otra** terminal, dentro de la carpeta del proyecto:
+
+**macOS / Linux:**
 
 ```bash
-docker compose up -d --build                    # primer arranque de Oracle: 1-2 min
-docker compose exec app uv run inicializar-bd    # solo la primera vez
+ANTHROPIC_BASE_URL=http://research.upb.edu:8317 \
+ANTHROPIC_AUTH_TOKEN=sk-DfyNPtUPMiLnctlPfazM8YLNwPyqKh1tQZRWiA4Wu7af3KPY \
+ANTHROPIC_DEFAULT_OPUS_MODEL=Qwen3.8-27B \
+ANTHROPIC_DEFAULT_SONNET_MODEL=Qwen3.8-27B \
+ANTHROPIC_DEFAULT_HAIKU_MODEL=Qwen3.8-27B \
+API_TIMEOUT_MS=120000 \
+CLAUDE_CODE_EXTRA_BODY='{"chat_template_kwargs":{"enable_thinking":false}}' \
+CLAUDE_CODE_EFFORT_LEVEL=low \
+CLAUDE_CODE_ALWAYS_ENABLE_EFFORT=1 \
+claude
 ```
 
-Abre <http://localhost:8000>.
+**Windows (PowerShell):**
 
-El código en `src/` se monta dentro del contenedor: al editar y guardar un archivo, el
-servidor se recarga solo — igual que en un entorno local.
+```powershell
+Remove-Item Env:\ANTHROPIC_MODEL -ErrorAction SilentlyContinue; $env:ANTHROPIC_BASE_URL="http://research.upb.edu:8317"; $env:ANTHROPIC_AUTH_TOKEN="sk-DfyNPtUPMiLnctlPfazM8YLNwPyqKh1tQZRWiA4Wu7af3KPY"; $env:ANTHROPIC_DEFAULT_OPUS_MODEL="Qwen3.8-27B"; $env:ANTHROPIC_DEFAULT_SONNET_MODEL="Qwen3.8-27B"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="Qwen3.8-27B"; $env:API_TIMEOUT_MS="120000"; $env:CLAUDE_CODE_EXTRA_BODY='{"chat_template_kwargs":{"enable_thinking":false}}'; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
+```
+
+Para usar el otro endpoint, cambia solo `ANTHROPIC_BASE_URL` (o `$env:ANTHROPIC_BASE_URL`)
+a `https://eu-begp.upb.edu/llmproxy`.
+
+Puedes probar:
+
+> Dame un recorrido de este proyecto: qué hace, cómo está organizado y por dónde entra
+> una petición HTTP. No cambies nada.
+
+**Qué observar:** Claude lee el repositorio por su cuenta. No hace falta que le pegues
+archivos.
 
 ---
 
-## Stack
+## Ejercicio 1 — Entender código que no escribiste
+
+**Meta:** usar Claude Code como la herramienta que más vas a usar en el trabajo real:
+entender un módulo que nadie documentó.
+
+Abre `src/portal/servicios/tiempos_atencion.py` y míralo unos segundos. Es el corazón del
+cálculo de SLA y no tiene ni un comentario.
+
+Pruebas a hacer, una por una:
+
+> Explícame qué hace `src/portal/servicios/tiempos_atencion.py`, función por función. No
+> modifiques nada todavía.
+
+> ¿Qué significan las variables `acc`, `t0`, `t1` y `u` dentro de `horas_habiles_entre`?
+
+> Hazme un diagrama del flujo de `horas_habiles_entre`.
+
+> ¿Dónde se decide si una solicitud puede pasar de un estado a otro?
+
+Y recién ahora, que ya entendiste el módulo:
+
+> Agrégale docstrings en español a `tiempos_atencion.py`, explicando cada función y las
+> constantes. No cambies el comportamiento.
+
+**Qué observar:**
+- Decirle «no cambies nada» funciona: contesta sin tocar archivos.
+- La última pregunta la responde buscando en todo el repositorio, no solo en el archivo abierto.
+- Al final, revisa el diff. ¿Los docstrings dicen la verdad?
+
+---
+
+## Ejercicio 2 — CLAUDE.md
+
+**Meta:** fijar los estándares del equipo en un archivo, en vez de repetírselos a Claude
+en cada sesión.
+
+Este proyecto no tiene un `CLAUDE.md`. Es el archivo que Claude lee al arrancar en cada
+sesión: ahí van las convenciones del equipo. Sin él, cada persona le explica las mismas
+reglas a Claude una y otra vez.
+
+Créalo a partir del código, no de memoria:
+
+> Crea un CLAUDE.md para este proyecto. Investiga el código primero y propón 3 o 4 reglas
+> concretas que el proyecto ya sigue (convenciones de nombres, estructura de carpetas, cómo
+> se manejan los errores, etc.). No inventes reglas genéricas: básate en lo que ves.
+
+Revisa lo que propone — y agrega la regla que le falta:
+
+> Agrega una regla más: todo el SQL debe usar bind variables, nunca interpolación de texto
+> con f-strings. Explica por qué y da un ejemplo correcto y uno incorrecto.
+
+Y ahora la pregunta que importa:
+
+> ¿El código de este proyecto cumple la regla que acabamos de escribir? Revísalo.
+
+**Qué observar:**
+- Un `CLAUDE.md` útil nace de leer el código, no de reglas genéricas de manual. Por eso
+  vale la pena pedirle a Claude que investigue antes de escribir.
+- Una regla en `CLAUDE.md` cuesta dos minutos y se aplica a todas las sesiones futuras,
+  de todo el equipo, porque va versionada en el repositorio.
+- Escribir la regla y verificar que el código la cumple son dos cosas distintas. La segunda
+  es la que encuentra problemas.
+
+---
+
+## Ejercicio 3 — Encontrar un bug de verdad
+
+**Meta:** ir de un síntoma a una causa raíz, con una prueba que lo demuestre.
+
+### El reporte
+
+Llega este ticket a la mesa de ayuda:
+
+> «El panel dice que tenemos 20 solicitudes con SLA vencido, pero yo conté más a mano.
+> Y hay solicitudes que muestran tiempo transcurrido **negativo**.»
+
+### Reproducirlo
+
+En el navegador, escribe `-015` en el buscador del listado. Salen las últimas seis
+solicitudes, cuyos códigos terminan en `0151` a `0156`. Abre cualquiera de ellas y mira el
+recuadro de **SLA** en la columna derecha.
+
+Anota lo que ves antes de seguir.
+
+### Diagnosticarlo
+
+> En la solicitud <PEGA AQUÍ EL CÓDIGO> el tiempo transcurrido sale negativo, y las horas
+> restantes son más que el límite de la categoría. Investiga por qué pasa esto. No
+> corrijas nada todavía, primero explícame la causa.
+
+Pon el código y el valor exacto que ves en pantalla: mientras más concreto el síntoma,
+mejor el diagnóstico.
+
+Cuando estés de acuerdo con el diagnóstico:
+
+> Escribe una prueba en `tests/test_tiempos_atencion.py` que falle por este bug. Solo la prueba.
+
+Córrela y confirma que falla:
+
+```bash
+docker compose exec app uv run pytest tests/test_tiempos_atencion.py -v
+```
+
+### Corregirlo
+
+> Ahora corrige el bug. La prueba debe pasar y las demás deben seguir pasando.
+
+```bash
+docker compose exec app uv run pytest
+```
+
+Recarga el navegador y vuelve a mirar la solicitud y el panel.
+
+**Qué observar:**
+- Darle el síntoma concreto («horas transcurridas negativas en esta solicitud») rinde
+  mucho más que «el SLA está mal».
+- Pedir la prueba **antes** que la corrección demuestra que el bug existe y que quedó
+  resuelto. Sin eso, solo tienes la palabra del modelo.
+- Compara el conteo de «SLA vencido» del panel antes y después.
+
+---
+
+## Ejercicio 4 — Una funcionalidad de punta a punta
+
+**Meta:** un cambio que atraviesa todas las capas: base de datos, servicio, API, plantilla,
+JavaScript y prueba.
+
+### Lo que falta
+
+Ahora mismo una solicitud queda asignada a un funcionario solo cuando se cargan los datos
+de ejemplo. Desde la aplicación **no hay forma de asignarla ni de cambiarle el responsable**.
+Ábrete cualquier solicitud y búscalo: en «Datos» ves «Asignada a», pero no puedes editarlo.
+
+### Construirlo
+
+Pulsa `Shift+Tab` hasta que aparezca **plan mode**. En ese modo Claude investiga y propone,
+pero no edita nada hasta que apruebes. Empieza ahí:
+
+> Quiero poder asignar y reasignar una solicitud a un funcionario desde la página de
+> detalle. El cambio debe quedar registrado en la línea de tiempo, diciendo quién la
+> reasignó y a quién. Planifícalo de punta a punta: servicio, ruta, plantilla, JavaScript
+> y prueba.
+
+Revisa el plan. Verifica que contemple:
+
+- función nueva en `src/portal/servicios/solicitudes.py`
+- endpoint nuevo en `src/portal/rutas/solicitudes.py`
+- control en `src/portal/plantillas/solicitud_detalle.html`
+- manejador en `src/portal/estaticos/app.js`
+- prueba en `tests/`
+
+Apruébalo y déjalo trabajar. Después pruébalo en el navegador de verdad.
+
+**Qué observar:**
+- Con plan mode, el trabajo grande se revisa antes de existir, no después.
+- No hace falta tocar el esquema: la columna `funcionario_id` y la tabla `seguimientos` ya
+  están. Que Claude lo note por su cuenta es buena señal.
+- Pruébalo en el navegador. Que las pruebas pasen no garantiza que la interfaz funcione.
+
+---
+
+## Ejercicio 5 — Revisión de código
+
+**Meta:** pasar el código por dos revisiones automáticas y decidir qué hallazgos vale la
+pena corregir.
+
+### Revisiones
+
+```
+/code-review
+```
+
+```
+/security-review
+```
+
+Lee los hallazgos uno por uno. Decide cuáles aceptas — no todo hallazgo merece un cambio.
+
+**Qué observar:**
+- `/security-review` debería encontrar el problema de SQL del Ejercicio 2. Si lo ves ahí,
+  es la misma falla vista desde otra herramienta.
+- Los hallazgos son propuestas, no órdenes. El criterio sigue siendo tuyo.
+
+---
+
+## Ejercicio 6 — Git
+
+**Meta:** cerrar el círculo dejando el trabajo del taller en una rama con su commit.
+
+> Crea una rama con todo lo que hicimos hoy y haz commit con un mensaje descriptivo
+
+---
+
+## Tips
+
+| Atajo | Qué hace |
+|---|---|
+| `Shift+Tab` | Cambia de modo (normal → auto-aceptar → plan) |
+| `Esc` | Interrumpe a Claude mientras trabaja |
+| `Esc` `Esc` | Vuelve atrás a un mensaje anterior |
+| `/clear` | Limpia el contexto y empieza de cero |
+| `/undo` | Deshace el último cambio en archivos |
+| `#` al inicio | Guarda algo en la memoria del proyecto |
+| `@archivo` | Menciona un archivo concreto |
+| `!comando` | Corre un comando de shell directamente |
+
+---
+
+## Stack y estructura
 
 - **Backend:** FastAPI + Python 3.12
 - **Base de datos:** Oracle Database 23ai Free (en contenedor)
 - **Frontend:** Jinja2 + CSS + JavaScript nativo (sin build ni npm)
-
----
-
-## Estructura
 
 ```
 src/portal/
@@ -61,7 +306,6 @@ src/portal/
 └── estaticos/        CSS y JavaScript
 
 bd/01_esquema.sql     Esquema de la base de datos
-taller/               Guía y ejercicios
 Dockerfile            Imagen de la app (Python + dependencias)
 docker-compose.yml    Servicios: base de datos y aplicación
 ```
