@@ -35,7 +35,7 @@ async def ciclo_de_vida(app: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(
-    title="Portal de Atención al Estudiante — UPB",
+    title="Portal de Atención al Estudiante - UPB",
     description=(
         "Registro y seguimiento de solicitudes de atención de estudiantes, "
         "con control de SLA por categoría."

@@ -1,4 +1,4 @@
-# Taller de Claude Code — Portal de Atención al Estudiante
+# Taller de Claude Code - Portal de Atención al Estudiante
 
 Universidad Privada Boliviana
 
@@ -9,8 +9,8 @@ resolverlos con Claude Code es exactamente el ejercicio.
 No hace falta que sepas FastAPI ni Oracle. Justamente de eso se trata: así es como llega
 un sistema que heredaste de otro equipo.
 
-Solo necesitas [Docker Desktop](https://www.docker.com/products/docker-desktop/) — no
-necesitas instalar nada más, todo corre dentro de un contenedor.
+Solo necesitas [Docker Desktop](https://www.docker.com/products/docker-desktop/). Nada más:
+todo corre dentro de un contenedor.
 
 ---
 
@@ -28,7 +28,7 @@ necesitas instalar nada más, todo corre dentro de un contenedor.
 
 ---
 
-## Ejercicio 0 — Puesta en marcha
+## Ejercicio 0 - Puesta en marcha
 
 **Meta:** tener la aplicación corriendo y Claude Code abierto en el proyecto.
 
@@ -42,6 +42,8 @@ No necesitas instalar nada más: todo corre dentro de Docker. El código se mont
 volumen, así que al editar y guardar un archivo, el servidor se recarga solo.
 
 Abre <http://localhost:8000> y date una vuelta: panel, listado, detalle de una solicitud.
+Vas a ver la sigla **SLA** en varios lados: es el tiempo límite para resolver una solicitud.
+Cada categoría tiene su propio límite: unas se resuelven en horas, otras en días.
 
 ### Conéctate a Claude Code
 
@@ -71,17 +73,19 @@ Remove-Item Env:\ANTHROPIC_MODEL -ErrorAction SilentlyContinue; $env:ANTHROPIC_B
 Para usar el otro endpoint, cambia solo `ANTHROPIC_BASE_URL` (o `$env:ANTHROPIC_BASE_URL`)
 a `https://eu-begp.upb.edu/llmproxy`.
 
-Puedes probar:
+### Primer prompt
 
-> Dame un recorrido de este proyecto: qué hace, cómo está organizado y por dónde entra
-> una petición HTTP. No cambies nada.
+Con Claude Code ya abierto, puedes probar:
+
+> Dame un recorrido de este proyecto: qué hace, cómo está organizado, y qué pasa desde que
+> abro una solicitud en el navegador hasta que veo sus datos en pantalla. No cambies nada.
 
 **Qué observar:** Claude lee el repositorio por su cuenta. No hace falta que le pegues
 archivos.
 
 ---
 
-## Ejercicio 1 — Entender código que no escribiste
+## Ejercicio 1 - Entender código que no escribiste
 
 **Meta:** usar Claude Code como la herramienta que más vas a usar en el trabajo real:
 entender un módulo que nadie documentó.
@@ -112,7 +116,7 @@ Y recién ahora, que ya entendiste el módulo:
 
 ---
 
-## Ejercicio 2 — CLAUDE.md
+## Ejercicio 2 - CLAUDE.md
 
 **Meta:** fijar los estándares del equipo en un archivo, en vez de repetírselos a Claude
 en cada sesión.
@@ -127,7 +131,7 @@ Créalo a partir del código, no de memoria:
 > concretas que el proyecto ya sigue (convenciones de nombres, estructura de carpetas, cómo
 > se manejan los errores, etc.). No inventes reglas genéricas: básate en lo que ves.
 
-Revisa lo que propone — y agrega la regla que le falta:
+Revisa lo que propone y agrega la regla que le falta:
 
 > Agrega una regla más: todo el SQL debe usar bind variables, nunca interpolación de texto
 > con f-strings. Explica por qué y da un ejemplo correcto y uno incorrecto.
@@ -146,7 +150,7 @@ Y ahora la pregunta que importa:
 
 ---
 
-## Ejercicio 3 — Encontrar un bug de verdad
+## Ejercicio 3 - Encontrar un bug de verdad
 
 **Meta:** ir de un síntoma a una causa raíz, con una prueba que lo demuestre.
 
@@ -203,10 +207,10 @@ Recarga el navegador y vuelve a mirar la solicitud y el panel.
 
 ---
 
-## Ejercicio 4 — Una funcionalidad de punta a punta
+## Ejercicio 4 - Una funcionalidad de punta a punta
 
-**Meta:** un cambio que atraviesa todas las capas: base de datos, servicio, API, plantilla,
-JavaScript y prueba.
+**Meta:** un cambio que toca toda la aplicación, no solo una parte: la base de datos, el
+código del servidor, la página que ves en el navegador y una prueba que lo confirme.
 
 ### Lo que falta
 
@@ -221,8 +225,7 @@ pero no edita nada hasta que apruebes. Empieza ahí:
 
 > Quiero poder asignar y reasignar una solicitud a un funcionario desde la página de
 > detalle. El cambio debe quedar registrado en la línea de tiempo, diciendo quién la
-> reasignó y a quién. Planifícalo de punta a punta: servicio, ruta, plantilla, JavaScript
-> y prueba.
+> reasignó y a quién. Planifícalo de punta a punta.
 
 Revisa el plan. Verifica que contemple:
 
@@ -242,7 +245,7 @@ Apruébalo y déjalo trabajar. Después pruébalo en el navegador de verdad.
 
 ---
 
-## Ejercicio 5 — Revisión de código
+## Ejercicio 5 - Revisión de código
 
 **Meta:** pasar el código por dos revisiones automáticas y decidir qué hallazgos vale la
 pena corregir.
@@ -257,7 +260,7 @@ pena corregir.
 /security-review
 ```
 
-Lee los hallazgos uno por uno. Decide cuáles aceptas — no todo hallazgo merece un cambio.
+Lee los hallazgos uno por uno. Decide cuáles aceptas: no todo hallazgo merece un cambio.
 
 **Qué observar:**
 - `/security-review` debería encontrar el problema de SQL del Ejercicio 2. Si lo ves ahí,
@@ -266,7 +269,7 @@ Lee los hallazgos uno por uno. Decide cuáles aceptas — no todo hallazgo merec
 
 ---
 
-## Ejercicio 6 — Git
+## Ejercicio 6 - Git
 
 **Meta:** cerrar el círculo dejando el trabajo del taller en una rama con su commit.
 

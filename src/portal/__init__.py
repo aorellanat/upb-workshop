@@ -1,1 +1,1 @@
-"""Portal de Atención al Estudiante — UPB."""
+"""Portal de Atención al Estudiante - UPB."""

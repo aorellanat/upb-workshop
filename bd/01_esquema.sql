@@ -1,4 +1,4 @@
--- Esquema del Portal de Atención al Estudiante — UPB
+-- Esquema del Portal de Atención al Estudiante - UPB
 --
 -- Se ejecuta con:  uv run inicializar-bd
 -- Requiere Oracle 23ai (usa DROP TABLE IF EXISTS y columnas IDENTITY).

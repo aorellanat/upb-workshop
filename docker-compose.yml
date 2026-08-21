@@ -1,7 +1,7 @@
-# `docker compose up -d` levanta todo: base de datos y aplicación. No hace falta instalar
-# Python ni uv en tu máquina. El código en `src/` se monta como volumen dentro del
-# contenedor `app`, así que al editar y guardar un archivo, el servidor se recarga solo
-# — igual que si corrieras la app en local.
+# `docker compose up -d` levanta todo: base de datos y aplicación. No necesitas instalar
+# nada más en tu máquina. El código en `src/` se monta como volumen dentro del contenedor
+# `app`, así que al editar y guardar un archivo, el servidor se recarga solo, igual que si
+# corrieras la app en local.
 
 services:
   oracle:

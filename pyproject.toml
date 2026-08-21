@@ -1,7 +1,7 @@
 [project]
 name = "portal-atencion"
 version = "0.1.0"
-description = "Portal de Atención al Estudiante — UPB"
+description = "Portal de Atención al Estudiante - UPB"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

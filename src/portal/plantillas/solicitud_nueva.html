@@ -25,7 +25,7 @@
             <option value="">Selecciona una categoría</option>
             {% for categoria in categorias %}
                 <option value="{{ categoria.id }}" data-sla="{{ categoria.sla_horas }}">
-                    {{ categoria.nombre }} — SLA {{ categoria.sla_horas }} h
+                    {{ categoria.nombre }} - SLA {{ categoria.sla_horas }} h
                 </option>
             {% endfor %}
         </select>
