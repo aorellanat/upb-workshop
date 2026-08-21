@@ -32,9 +32,10 @@ necesitas instalar nada más, todo corre dentro de un contenedor.
 
 **Meta:** tener la aplicación corriendo y Claude Code abierto en el proyecto.
 
+Levanta la base de datos y la aplicación (la primera vez carga los datos de ejemplo sola):
+
 ```bash
-docker compose up -d --build   # base de datos + aplicación
-docker compose exec app uv run inicializar-bd   # solo la primera vez, si faltan los datos
+docker compose up -d --build
 ```
 
 No necesitas instalar nada más: todo corre dentro de Docker. El código se monta como

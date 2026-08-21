@@ -8,7 +8,7 @@ El generador usa una semilla fija (``SEMILLA``), así que todos los asistentes d
 obtienen exactamente el mismo conjunto de datos. Las fechas se calculan relativas al
 momento de la ejecución, de modo que el panel siempre muestra actividad reciente.
 
-Ojo: este script **borra y vuelve a crear** todas las tablas.
+Si el esquema ya existe, no hace nada: no vuelve a borrar ni recrear las tablas.
 """
 
 from __future__ import annotations
@@ -255,6 +255,23 @@ def _leer_sentencias(ruta: Path) -> list[str]:
     ]
     texto = "\n".join(lineas_utiles)
     return [sentencia.strip() for sentencia in texto.split(";") if sentencia.strip()]
+
+
+def _ya_inicializado(conexion: oracledb.Connection) -> bool:
+    """
+    True si ya hay datos cargados, no solo si existe el esquema.
+
+    Una ejecución anterior interrumpida a mitad de ``insertar_datos`` puede dejar
+    las tablas creadas pero vacías; en ese caso se debe volver a sembrar, no omitirlo.
+    """
+    with conexion.cursor() as cursor:
+        try:
+            cursor.execute("SELECT COUNT(*) FROM categorias")
+        except oracledb.DatabaseError:
+            conexion.rollback()
+            return False
+        (cantidad,) = cursor.fetchone()
+    return cantidad > 0
 
 
 def crear_esquema(conexion: oracledb.Connection) -> None:
@@ -509,6 +526,9 @@ def main() -> int:
         return 1
 
     with conexion:
+        if _ya_inicializado(conexion):
+            print("La base de datos ya está inicializada. Nada que hacer.")
+            return 0
         crear_esquema(conexion)
         print("Cargando datos semilla ...")
         insertar_datos(conexion)

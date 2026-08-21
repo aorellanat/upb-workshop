@@ -7,9 +7,11 @@ WORKDIR /app
 COPY pyproject.toml uv.lock README.md ./
 COPY src ./src
 COPY bd ./bd
+COPY docker-entrypoint.sh ./
 
 RUN uv sync --frozen --extra dev
+RUN chmod +x docker-entrypoint.sh
 
 EXPOSE 8000
 
-CMD ["uv", "run", "uvicorn", "portal.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--reload-dir", "/app/src"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
