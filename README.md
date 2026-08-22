@@ -44,6 +44,28 @@ irm https://claude.ai/install.ps1 | iex
 curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
 ```
 
+#### Solucionar "Claude no reconocido" en el PATH de Windows
+
+Si el comando `claude` no se reconoce en tu terminal de Windows, probablemente la carpeta
+de instalación no está en la variable de entorno PATH del sistema. Así se corrige:
+
+1. Abre las variables de entorno:
+   - Presiona `Win + R`, escribe `sysdm.cpl` y presiona Enter.
+   - Ve a la pestaña **Opciones avanzadas**.
+   - Haz clic en **Variables de entorno**.
+2. Edita el PATH de usuario:
+   - En **Variables de usuario**, busca y selecciona **Path**.
+   - Haz clic en **Editar**.
+3. Agrega la nueva ruta:
+   - Haz clic en **Nuevo** y agrega:
+
+     ```
+     %USERPROFILE%\.local\bin
+     ```
+
+   - Haz clic en **Aceptar** para cerrar todos los diálogos.
+4. Reinicia la terminal: cierra y vuelve a abrirla para que el cambio tome efecto.
+
 Cierra y vuelve a abrir la terminal, y comprueba que quedó instalado:
 
 ```bash
