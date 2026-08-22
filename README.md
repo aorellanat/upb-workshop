@@ -371,13 +371,13 @@ Sal de Claude Code (`Ctrl+C` dos veces) y, en la carpeta del proyecto:
 
 ```bash
 claude mcp add --transport stdio dbtest -- npx -y @bytebase/dbhub \
-  --dsn 'postgresql://postgres:lp83%3Ce9QR%5C%3DW@eu-begp.upb.edu:5433/dbtest'
+  --dsn 'postgresql://postgres:Alpaca24@research.upb.edu:5432/dbtest'
 ```
 
 **Windows (PowerShell)**, en una sola línea:
 
 ```powershell
-claude mcp add --transport stdio dbtest -- npx -y @bytebase/dbhub --dsn 'postgresql://postgres:lp83%3Ce9QR%5C%3DW@eu-begp.upb.edu:5433/dbtest'
+claude mcp add --transport stdio dbtest -- npx -y @bytebase/dbhub --dsn 'postgresql://postgres:Alpaca24@research.upb.edu:5432/dbtest'
 ```
 
 Vuelve a abrir Claude Code (el mismo comando largo de **Puesta en marcha**) y verifica:
@@ -421,11 +421,11 @@ Cuando te convenza, córrelo tú en DBeaver (o el visor que uses):
 
 | | |
 |---|---|
-| Host | `eu-begp.upb.edu` |
-| Puerto | `5433` |
+| Host | `research.upb.edu` |
+| Puerto | `5432` |
 | Base | `dbtest` |
 | Usuario | `postgres` |
-| Contraseña | `lp83<e9QR\=W` |
+| Contraseña | `Alpaca24` |
 
 Son 6 carreras: tienen que salir 30 filas, 5 por carrera.
 
