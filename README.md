@@ -101,6 +101,12 @@ git clone https://github.com/aorellanat/upb-workshop.git
 cd upb-workshop
 ```
 
+Si ya tenías el repositorio clonado de antes, actualízalo para traer los últimos cambios:
+
+```bash
+git pull
+```
+
 Levanta la base de datos y la aplicación (la primera vez carga los datos de ejemplo sola):
 
 ```bash
