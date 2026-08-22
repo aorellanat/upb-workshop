@@ -166,45 +166,33 @@ Remove-Item Env:\ANTHROPIC_MODEL -ErrorAction SilentlyContinue; $env:ANTHROPIC_B
 Para usar el otro endpoint, cambia solo `ANTHROPIC_BASE_URL` (o `$env:ANTHROPIC_BASE_URL`)
 a `https://eu-begp.upb.edu/llmproxy`.
 
-### Opción de respaldo: DeepInfra directo
+### Conéctate a Claude Code (Claude Sonnet 5)
 
-Si el proxy o los Sparks fallan, conéctate directo a DeepInfra (sin pasar por Sparks ni
-proxy). Usa cualquiera de estas 4 líneas, cada una con su propia clave para repartir la
-carga entre varias personas:
+Misma idea, pero usando `claude-sonnet-5` como modelo para Opus, Sonnet y Haiku.
 
-```bash
-ANTHROPIC_BASE_URL=https://api.deepinfra.com/anthropic ANTHROPIC_AUTH_TOKEN=TRkrAgPq02IoNsOp9o0QKvrhHZ6WgjSp ANTHROPIC_MODEL=Qwen/Qwen3.8-27B ANTHROPIC_DEFAULT_HAIKU_MODEL=Qwen/Qwen3.8-27B CLAUDE_CODE_MAX_OUTPUT_TOKENS=16384 CLAUDE_CODE_EFFORT_LEVEL=low CLAUDE_CODE_ALWAYS_ENABLE_EFFORT=1 claude
-```
+**macOS / Linux:**
 
 ```bash
-ANTHROPIC_BASE_URL=https://api.deepinfra.com/anthropic ANTHROPIC_AUTH_TOKEN=E95fhmOpflsE6FebZ7uyVdA00gUEA0LB ANTHROPIC_MODEL=Qwen/Qwen3.8-27B ANTHROPIC_DEFAULT_HAIKU_MODEL=Qwen/Qwen3.8-27B CLAUDE_CODE_MAX_OUTPUT_TOKENS=16384 CLAUDE_CODE_EFFORT_LEVEL=low CLAUDE_CODE_ALWAYS_ENABLE_EFFORT=1 claude
+ANTHROPIC_BASE_URL=http://research.upb.edu:8317 \
+ANTHROPIC_AUTH_TOKEN=sk-DfyNPtUPMiLnctlPfazM8YLNwPyqKh1tQZRWiA4Wu7af3KPY \
+ANTHROPIC_DEFAULT_OPUS_MODEL=claude-sonnet-5 \
+ANTHROPIC_DEFAULT_SONNET_MODEL=claude-sonnet-5 \
+ANTHROPIC_DEFAULT_HAIKU_MODEL=claude-sonnet-5 \
+API_TIMEOUT_MS=120000 \
+CLAUDE_CODE_EXTRA_BODY='{"chat_template_kwargs":{"enable_thinking":false}}' \
+CLAUDE_CODE_EFFORT_LEVEL=low \
+CLAUDE_CODE_ALWAYS_ENABLE_EFFORT=1 \
+claude
 ```
 
-```bash
-ANTHROPIC_BASE_URL=https://api.deepinfra.com/anthropic ANTHROPIC_AUTH_TOKEN=LEnepXMYNK2ABQmALZi1v964EFUZv7Qe ANTHROPIC_MODEL=Qwen/Qwen3.8-27B ANTHROPIC_DEFAULT_HAIKU_MODEL=Qwen/Qwen3.8-27B CLAUDE_CODE_MAX_OUTPUT_TOKENS=16384 CLAUDE_CODE_EFFORT_LEVEL=low CLAUDE_CODE_ALWAYS_ENABLE_EFFORT=1 claude
-```
-
-```bash
-ANTHROPIC_BASE_URL=https://api.deepinfra.com/anthropic ANTHROPIC_AUTH_TOKEN=5iTYRrsnEvfkP8sYgqQRy3ScPkcog6S2 ANTHROPIC_MODEL=Qwen/Qwen3.8-27B ANTHROPIC_DEFAULT_HAIKU_MODEL=Qwen/Qwen3.8-27B CLAUDE_CODE_MAX_OUTPUT_TOKENS=16384 CLAUDE_CODE_EFFORT_LEVEL=low CLAUDE_CODE_ALWAYS_ENABLE_EFFORT=1 claude
-```
-
-**Windows (PowerShell)**, la misma opción de respaldo, una línea por clave:
-
-```powershell
-$env:ANTHROPIC_BASE_URL="https://api.deepinfra.com/anthropic"; $env:ANTHROPIC_AUTH_TOKEN="TRkrAgPq02IoNsOp9o0QKvrhHZ6WgjSp"; $env:ANTHROPIC_MODEL="Qwen/Qwen3.8-27B"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="Qwen/Qwen3.8-27B"; $env:CLAUDE_CODE_MAX_OUTPUT_TOKENS="16384"; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
-```
+**Windows (PowerShell):**
 
 ```powershell
-$env:ANTHROPIC_BASE_URL="https://api.deepinfra.com/anthropic"; $env:ANTHROPIC_AUTH_TOKEN="E95fhmOpflsE6FebZ7uyVdA00gUEA0LB"; $env:ANTHROPIC_MODEL="Qwen/Qwen3.8-27B"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="Qwen/Qwen3.8-27B"; $env:CLAUDE_CODE_MAX_OUTPUT_TOKENS="16384"; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
+Remove-Item Env:\ANTHROPIC_MODEL -ErrorAction SilentlyContinue; $env:ANTHROPIC_BASE_URL="http://research.upb.edu:8317"; $env:ANTHROPIC_AUTH_TOKEN="sk-DfyNPtUPMiLnctlPfazM8YLNwPyqKh1tQZRWiA4Wu7af3KPY"; $env:ANTHROPIC_DEFAULT_OPUS_MODEL="claude-sonnet-5"; $env:ANTHROPIC_DEFAULT_SONNET_MODEL="claude-sonnet-5"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="claude-sonnet-5"; $env:API_TIMEOUT_MS="120000"; $env:CLAUDE_CODE_EXTRA_BODY='{"chat_template_kwargs":{"enable_thinking":false}}'; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
 ```
 
-```powershell
-$env:ANTHROPIC_BASE_URL="https://api.deepinfra.com/anthropic"; $env:ANTHROPIC_AUTH_TOKEN="LEnepXMYNK2ABQmALZi1v964EFUZv7Qe"; $env:ANTHROPIC_MODEL="Qwen/Qwen3.8-27B"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="Qwen/Qwen3.8-27B"; $env:CLAUDE_CODE_MAX_OUTPUT_TOKENS="16384"; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
-```
-
-```powershell
-$env:ANTHROPIC_BASE_URL="https://api.deepinfra.com/anthropic"; $env:ANTHROPIC_AUTH_TOKEN="5iTYRrsnEvfkP8sYgqQRy3ScPkcog6S2"; $env:ANTHROPIC_MODEL="Qwen/Qwen3.8-27B"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="Qwen/Qwen3.8-27B"; $env:CLAUDE_CODE_MAX_OUTPUT_TOKENS="16384"; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
-```
+Para usar el otro endpoint, cambia solo `ANTHROPIC_BASE_URL` (o `$env:ANTHROPIC_BASE_URL`)
+a `https://eu-begp.upb.edu/llmproxy`.
 
 ### Primer prompt
 
