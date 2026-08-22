@@ -29,7 +29,7 @@ todo corre dentro de un contenedor.
 
 ---
 
-## Ejercicio 0 - Puesta en marcha
+## Puesta en marcha
 
 **Meta:** tener la aplicación corriendo y Claude Code abierto en el proyecto.
 
@@ -88,7 +88,7 @@ archivos.
 
 ---
 
-## Ejercicio 1 - Entender código que no escribiste
+## Ejercicio 0 - Entender código que no escribiste
 
 **Meta:** usar Claude Code como la herramienta que más vas a usar en el trabajo real:
 entender un módulo que nadie documentó.
