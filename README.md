@@ -42,8 +42,9 @@ No necesitas instalar nada más: todo corre dentro de Docker. El código se mont
 volumen, así que al editar y guardar un archivo, el servidor se recarga solo.
 
 Abre <http://localhost:8000> y date una vuelta: panel, listado, detalle de una solicitud.
-Vas a ver la sigla **SLA** en varios lados: es el tiempo límite para resolver una solicitud.
-Cada categoría tiene su propio límite: unas se resuelven en horas, otras en días.
+Vas a ver la sigla **SLA** en varios lados: es el *plazo de atención*, el tiempo límite para
+resolver una solicitud. Cada categoría tiene su propio límite: unas se resuelven en horas,
+otras en días.
 
 ### Conéctate a Claude Code
 
@@ -77,8 +78,7 @@ a `https://eu-begp.upb.edu/llmproxy`.
 
 Con Claude Code ya abierto, puedes probar:
 
-> Dame un recorrido de este proyecto: qué hace, cómo está organizado, y qué pasa desde que
-> abro una solicitud en el navegador hasta que veo sus datos en pantalla. No cambies nada.
+> Dame un recorrido de este proyecto: qué hace y cómo está organizado. No cambies nada.
 
 **Qué observar:** Claude lee el repositorio por su cuenta. No hace falta que le pegues
 archivos.
@@ -90,29 +90,14 @@ archivos.
 **Meta:** usar Claude Code como la herramienta que más vas a usar en el trabajo real:
 entender un módulo que nadie documentó.
 
-Abre `src/portal/servicios/tiempos_atencion.py` y míralo unos segundos. Es el corazón del
-cálculo de SLA y no tiene ni un comentario.
+Abre `src/portal/servicios/tiempos_atencion.py` y míralo unos segundos. Pruebas a hacer:
 
-Pruebas a hacer, una por una:
-
-> Explícame qué hace `src/portal/servicios/tiempos_atencion.py`, función por función. No
-> modifiques nada todavía.
-
-> ¿Qué significan las variables `acc`, `t0`, `t1` y `u` dentro de `horas_habiles_entre`?
-
-> Hazme un diagrama del flujo de `horas_habiles_entre`.
-
-> ¿Dónde se decide si una solicitud puede pasar de un estado a otro?
+> Explícame qué hace `src/portal/servicios/tiempos_atencion.py`
 
 Y recién ahora, que ya entendiste el módulo:
 
-> Agrégale docstrings en español a `tiempos_atencion.py`, explicando cada función y las
-> constantes. No cambies el comportamiento.
-
-**Qué observar:**
-- Decirle «no cambies nada» funciona: contesta sin tocar archivos.
-- La última pregunta la responde buscando en todo el repositorio, no solo en el archivo abierto.
-- Al final, revisa el diff. ¿Los docstrings dicen la verdad?
+> Agrégale comentarios a `tiempos_atencion.py`, explicando cada función y las
+> constantes
 
 ---
 
@@ -127,26 +112,13 @@ reglas a Claude una y otra vez.
 
 Créalo a partir del código, no de memoria:
 
-> Crea un CLAUDE.md para este proyecto. Investiga el código primero y propón 3 o 4 reglas
-> concretas que el proyecto ya sigue (convenciones de nombres, estructura de carpetas, cómo
-> se manejan los errores, etc.). No inventes reglas genéricas: básate en lo que ves.
+> Crea un CLAUDE.md para este proyecto.
 
-Revisa lo que propone y agrega la regla que le falta:
-
-> Agrega una regla más: todo el SQL debe usar bind variables, nunca interpolación de texto
-> con f-strings. Explica por qué y da un ejemplo correcto y uno incorrecto.
-
-Y ahora la pregunta que importa:
-
-> ¿El código de este proyecto cumple la regla que acabamos de escribir? Revísalo.
+Revisa lo que propone.
 
 **Qué observar:**
 - Un `CLAUDE.md` útil nace de leer el código, no de reglas genéricas de manual. Por eso
   vale la pena pedirle a Claude que investigue antes de escribir.
-- Una regla en `CLAUDE.md` cuesta dos minutos y se aplica a todas las sesiones futuras,
-  de todo el equipo, porque va versionada en el repositorio.
-- Escribir la regla y verificar que el código la cumple son dos cosas distintas. La segunda
-  es la que encuentra problemas.
 
 ---
 
@@ -200,7 +172,7 @@ Recarga el navegador y vuelve a mirar la solicitud y el panel.
 
 **Qué observar:**
 - Darle el síntoma concreto («horas transcurridas negativas en esta solicitud») rinde
-  mucho más que «el SLA está mal».
+  mucho más que «el plazo de atención está mal».
 - Pedir la prueba **antes** que la corrección demuestra que el bug existe y que quedó
   resuelto. Sin eso, solo tienes la palabra del modelo.
 - Compara el conteo de «SLA vencido» del panel antes y después.
@@ -247,7 +219,7 @@ Apruébalo y déjalo trabajar. Después pruébalo en el navegador de verdad.
 
 ## Ejercicio 5 - Revisión de código
 
-**Meta:** pasar el código por dos revisiones automáticas y decidir qué hallazgos vale la
+**Meta:** revisar el código automáticamente y decidir qué hallazgos vale la
 pena corregir.
 
 ### Revisiones
@@ -256,16 +228,7 @@ pena corregir.
 /code-review
 ```
 
-```
-/security-review
-```
-
 Lee los hallazgos uno por uno. Decide cuáles aceptas: no todo hallazgo merece un cambio.
-
-**Qué observar:**
-- `/security-review` debería encontrar el problema de SQL del Ejercicio 2. Si lo ves ahí,
-  es la misma falla vista desde otra herramienta.
-- Los hallazgos son propuestas, no órdenes. El criterio sigue siendo tuyo.
 
 ---
 
@@ -305,7 +268,7 @@ src/portal/
 ├── basedatos.py      Pool de Oracle
 ├── modelos.py        Modelos Pydantic
 ├── rutas/            Vistas HTML y endpoints de la API
-├── servicios/        Lógica de negocio (estados, SLA, métricas)
+├── servicios/        Lógica de negocio (estados, plazo de atención, métricas)
 ├── plantillas/       Plantillas Jinja2
 └── estaticos/        CSS y JavaScript
 
