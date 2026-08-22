@@ -309,9 +309,8 @@ código del servidor, la página que ves en el navegador y una prueba que lo con
 
 ### Lo que falta
 
-Ahora mismo una solicitud queda asignada a un funcionario solo cuando se cargan los datos
-de ejemplo. Desde la aplicación **no hay forma de asignarla ni de cambiarle el responsable**.
-Ábrete cualquier solicitud y búscalo: en «Datos» ves «Asignada a», pero no puedes editarlo.
+El portal no tiene ninguna forma de recoger la opinión de un estudiante. No hay encuesta de
+satisfacción ni un canal para dejar una queja: si algo salió mal, no tiene dónde decirlo.
 
 ### Construirlo
 
@@ -319,26 +318,25 @@ Pulsa `Shift+Tab` hasta que aparezca **plan mode**. En ese modo Claude investiga
 pero no edita nada hasta que apruebes. Empieza ahí:
 
 ```
-Quiero poder asignar y reasignar una solicitud a un funcionario desde la página de detalle.
-El cambio debe quedar registrado en la línea de tiempo, diciendo quién la reasignó y a
-quién. Planifícalo de punta a punta.
+Quiero agregar una encuesta de satisfacción al portal. Necesito un botón junto a "Panel" en
+la barra de navegación que lleve a un formulario simple donde cualquier estudiante pueda
+calificar su experiencia (1 a 5) y dejar un comentario libre que también sirva para
+registrar una queja. No hace falta vincularlo a una solicitud existente ni a un estudiante
+registrado: nombre y correo son opcionales. Planifícalo de punta a punta.
 ```
 
 Revisa el plan. Verifica que contemple:
 
-- función nueva en `src/portal/servicios/solicitudes.py`
-- endpoint nuevo en `src/portal/rutas/solicitudes.py`
-- control en `src/portal/plantillas/solicitud_detalle.html`
+- tabla nueva `encuestas` en `bd/01_esquema.sql`
+- modelos nuevos en `src/portal/modelos.py`
+- servicio nuevo en `src/portal/servicios/encuestas.py`
+- endpoint nuevo en `src/portal/rutas/encuestas.py`
+- vista y plantilla nuevas (`src/portal/rutas/vistas.py` y una plantilla en `src/portal/plantillas/`)
+- botón en `src/portal/plantillas/base.html`
 - manejador en `src/portal/estaticos/app.js`
 - prueba en `tests/`
 
 Apruébalo y déjalo trabajar. Después pruébalo en el navegador de verdad.
-
-**Qué observar:**
-- Con plan mode, el trabajo grande se revisa antes de existir, no después.
-- No hace falta tocar el esquema: la columna `funcionario_id` y la tabla `seguimientos` ya
-  están. Que Claude lo note por su cuenta es buena señal.
-- Pruébalo en el navegador. Que las pruebas pasen no garantiza que la interfaz funcione.
 
 ---
 
