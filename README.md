@@ -110,6 +110,23 @@ docker compose up -d --build
 No necesitas instalar nada más: todo corre dentro de Docker. El código se monta como
 volumen, así que al editar y guardar un archivo, el servidor se recarga solo.
 
+#### Si el contenedor de la app falla con código 255
+
+Docker guarda en caché las capas de la imagen. Si ya corriste `docker compose up --build`
+antes de que se corrigiera este problema, esa capa vieja sigue en caché. Fuerza una
+reconstrucción:
+
+```bash
+docker compose up --build --force-recreate
+```
+
+Si el error persiste, limpia la caché por completo:
+
+```bash
+docker compose build --no-cache
+docker compose up
+```
+
 Abre <http://localhost:8000> y date una vuelta: panel, listado, detalle de una solicitud.
 Vas a ver la sigla **SLA** en varios lados: es el *plazo de atención*, el tiempo límite para
 resolver una solicitud. Cada categoría tiene su propio límite: unas se resuelven en horas,
