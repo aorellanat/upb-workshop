@@ -266,7 +266,8 @@ empaquetar, no formatear de nuevo cada vez.
 Crea una skill llamada reporte-pdf. Cuando le pida un reporte de los problemas del panel de
 control, debe generar un PDF con las solicitudes vencidas y en riesgo, agrupadas por
 categoría. El PDF siempre debe llevar el logo de src/portal/assets/upb-logo.png y decir
-"Universidad Privada Boliviana", sin que yo tenga que pedirlo cada vez.
+"Universidad Privada Boliviana", sin que yo tenga que pedirlo cada vez. Guarda el PDF en una
+carpeta reportes/ en la raíz del repo (agrégala al .gitignore), no en un directorio temporal.
 ```
 
 Revisa el archivo que crea Claude (algo como `.claude/skills/reporte-pdf/SKILL.md`): fíjate
@@ -279,7 +280,8 @@ ya trae instalada `fpdf2` para armar el PDF.
 /reporte-pdf
 ```
 
-Abre el PDF que genera y confirma que el logo y el nombre de la universidad están ahí.
+Abre el PDF que genera en `reportes/` y confirma que el logo y el nombre de la universidad
+están ahí.
 
 ---
 
