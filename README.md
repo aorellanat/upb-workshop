@@ -257,8 +257,8 @@ Revisa lo que propone.
 **Meta:** empaquetar un procedimiento que se repite en una **skill**, para no tener que
 explicárselo a Claude de cero cada vez.
 
-Dirección Académica pide seguido un reporte en PDF de los problemas del panel —las
-solicitudes vencidas y en riesgo— y hasta ahora alguien tiene que armarlo a mano cada vez:
+Dirección Académica pide seguido un reporte en PDF de los problemas del panel, las
+solicitudes vencidas y en riesgo, y hasta ahora alguien tiene que armarlo a mano cada vez:
 copiar los datos, pegar el logo, acomodar el formato. Es el tipo de pedido que conviene
 empaquetar, no formatear de nuevo cada vez.
 
@@ -357,7 +357,7 @@ Lee los hallazgos uno por uno. Decide cuáles aceptas: no todo hallazgo merece u
 
 ## Ejercicio 6 - Conectar Claude a la base de datos (MCP)
 
-**Meta:** darle a Claude una herramienta que no tenía —una base de datos real— y usarla
+**Meta:** darle a Claude una herramienta que no tenía, una base de datos real, y usarla
 para resolver un pedido como los que llegan de verdad: un reporte para el viernes.
 
 Hasta ahora Claude solo leyó archivos del proyecto. Un **MCP** (Model Context Protocol) es
