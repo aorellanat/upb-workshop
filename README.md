@@ -24,7 +24,8 @@ todo corre dentro de un contenedor.
 | 3 | Encontrar un bug de verdad |
 | 4 | Una funcionalidad de punta a punta |
 | 5 | Revisión de código |
-| 6 | Git |
+| 6 | Conectar Claude a la base de datos (MCP) |
+| 7 | Git |
 
 ---
 
@@ -232,7 +233,101 @@ Lee los hallazgos uno por uno. Decide cuáles aceptas: no todo hallazgo merece u
 
 ---
 
-## Ejercicio 6 - Git
+## Ejercicio 6 - Conectar Claude a la base de datos (MCP)
+
+**Meta:** darle a Claude una herramienta que no tenía —una base de datos real— y usarla
+para resolver un pedido como los que llegan de verdad: un reporte para el viernes.
+
+Hasta ahora Claude solo leyó archivos del proyecto. Un **MCP** (Model Context Protocol) es
+la forma de conectarle herramientas externas: una base de datos, Jira, GitHub, lo que sea.
+Aquí le vamos a conectar una base de datos académica de la universidad (Postgres, aparte
+del portal: son sistemas distintos).
+
+### Conectar el servidor
+
+Sal de Claude Code (`Ctrl+C` dos veces) y, en la carpeta del proyecto:
+
+```bash
+claude mcp add --transport stdio dbtest -- npx -y @bytebase/dbhub \
+  --dsn 'postgresql://postgres:lp83%3Ce9QR%5C%3DW@eu-begp.upb.edu:5433/dbtest'
+```
+
+**Windows (PowerShell)**, en una sola línea:
+
+```powershell
+claude mcp add --transport stdio dbtest -- npx -y @bytebase/dbhub --dsn 'postgresql://postgres:lp83%3Ce9QR%5C%3DW@eu-begp.upb.edu:5433/dbtest'
+```
+
+Vuelve a abrir Claude Code (el mismo comando largo del Ejercicio 0) y verifica:
+
+```
+/mcp
+```
+
+`dbtest` tiene que aparecer conectado. Fíjate en lo que **no** hiciste: no instalaste un
+cliente de base de datos ni escribiste código para conectarte.
+
+### El pedido
+
+Llega este correo de Dirección Académica:
+
+> «Necesitamos el **cuadro de honor** de este semestre: los 5 mejores estudiantes de cada
+> carrera con su promedio. Para el viernes.»
+
+Nadie te dice en qué tablas está eso. Así llegan los pedidos.
+
+### Primero el SQL
+
+Antes de pedir el reporte, pide la consulta:
+
+> Tengo conectada la base de datos `dbtest` por MCP. Explórala y escríbeme el SQL del
+> cuadro de honor de este semestre: los 5 mejores estudiantes por carrera, con código,
+> nombre, carrera y promedio. Solo el SQL, no me generes el reporte todavía. Explícame qué
+> decisiones tomaste.
+
+Léelo antes de correrlo. Deberías poder contestar estas tres preguntas mirando la consulta:
+
+- ¿Qué periodo eligió como «este semestre»? En la base hay más de uno.
+- Este semestre todavía no tiene nota final cargada. Entonces, ¿de dónde sale el promedio,
+  y qué pasa con las ponderaciones de las evaluaciones que aún no se rindieron?
+- ¿Deja fuera las inscripciones retiradas y a los estudiantes que no están activos?
+
+Si algo no cierra, díselo y que lo corrija. **Esa conversación es el ejercicio**, no el SQL.
+
+Cuando te convenza, córrelo tú en DBeaver (o el visor que uses):
+
+| | |
+|---|---|
+| Host | `eu-begp.upb.edu` |
+| Puerto | `5433` |
+| Base | `dbtest` |
+| Usuario | `postgres` |
+| Contraseña | `lp83<e9QR\=W` |
+
+Son 6 carreras: tienen que salir 30 filas, 5 por carrera.
+
+### Ahora sí, el reporte
+
+Ya confías en la consulta, así que sáltate el paso manual:
+
+> Ejecuta esa consulta por MCP y guárdame el resultado en `reportes/cuadro_de_honor.csv`,
+> con una columna de puesto, ordenado por carrera y puesto.
+
+Ábrelo. Eso es lo que mandas el viernes.
+
+**Qué observar:**
+- Claude no adivinó el esquema: lo consultó. Sin el MCP, la misma pregunta habría empezado
+  con «pásame el esquema» y habría terminado con nombres de tablas inventados.
+- Mira el pedido de permiso cada vez que toca la base. El MCP le da a Claude **las mismas
+  credenciales que le pasaste**: si ese usuario puede borrar, Claude puede borrar. Para
+  reportes conéctate con un usuario de solo lectura (o agrega `--readonly` al comando de
+  dbhub).
+- El paso manual por DBeaver no fue burocracia: sirvió para revisar la consulta una vez.
+  Revisada, el resto se automatiza.
+
+---
+
+## Ejercicio 7 - Git
 
 **Meta:** cerrar el círculo dejando el trabajo del taller en una rama con su commit.
 
@@ -249,6 +344,7 @@ Lee los hallazgos uno por uno. Decide cuáles aceptas: no todo hallazgo merece u
 | `Esc` `Esc` | Vuelve atrás a un mensaje anterior |
 | `/clear` | Limpia el contexto y empieza de cero |
 | `/undo` | Deshace el último cambio en archivos |
+| `/mcp` | Muestra los servidores MCP conectados |
 | `#` al inicio | Guarda algo en la memoria del proyecto |
 | `@archivo` | Menciona un archivo concreto |
 | `!comando` | Corre un comando de shell directamente |
