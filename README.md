@@ -79,7 +79,9 @@ a `https://eu-begp.upb.edu/llmproxy`.
 
 Con Claude Code ya abierto, puedes probar:
 
-> Dame un recorrido de este proyecto: qué hace y cómo está organizado. No cambies nada.
+```
+Dame un recorrido de este proyecto: qué hace y cómo está organizado. No cambies nada.
+```
 
 **Qué observar:** Claude lee el repositorio por su cuenta. No hace falta que le pegues
 archivos.
@@ -93,12 +95,15 @@ entender un módulo que nadie documentó.
 
 Abre `src/portal/servicios/tiempos_atencion.py` y míralo unos segundos. Pruebas a hacer:
 
-> Explícame qué hace `src/portal/servicios/tiempos_atencion.py`
+```
+Explícame qué hace src/portal/servicios/tiempos_atencion.py
+```
 
 Y recién ahora, que ya entendiste el módulo:
 
-> Agrégale comentarios a `tiempos_atencion.py`, explicando cada función y las
-> constantes
+```
+Agrégale comentarios a tiempos_atencion.py, explicando cada función y las constantes
+```
 
 ---
 
@@ -113,7 +118,9 @@ reglas a Claude una y otra vez.
 
 Créalo a partir del código, no de memoria:
 
-> Crea un CLAUDE.md para este proyecto.
+```
+Crea un CLAUDE.md para este proyecto.
+```
 
 Revisa lo que propone.
 
@@ -144,16 +151,20 @@ Anota lo que ves antes de seguir.
 
 ### Diagnosticarlo
 
-> En la solicitud <PEGA AQUÍ EL CÓDIGO> el tiempo transcurrido sale negativo, y las horas
-> restantes son más que el límite de la categoría. Investiga por qué pasa esto. No
-> corrijas nada todavía, primero explícame la causa.
+```
+En la solicitud <PEGA AQUÍ EL CÓDIGO> el tiempo transcurrido sale negativo, y las horas
+restantes son más que el límite de la categoría. Investiga por qué pasa esto. No corrijas
+nada todavía, primero explícame la causa.
+```
 
 Pon el código y el valor exacto que ves en pantalla: mientras más concreto el síntoma,
 mejor el diagnóstico.
 
 Cuando estés de acuerdo con el diagnóstico:
 
-> Escribe una prueba en `tests/test_tiempos_atencion.py` que falle por este bug. Solo la prueba.
+```
+Escribe una prueba en tests/test_tiempos_atencion.py que falle por este bug. Solo la prueba.
+```
 
 Córrela y confirma que falla:
 
@@ -163,7 +174,9 @@ docker compose exec app uv run pytest tests/test_tiempos_atencion.py -v
 
 ### Corregirlo
 
-> Ahora corrige el bug. La prueba debe pasar y las demás deben seguir pasando.
+```
+Ahora corrige el bug. La prueba debe pasar y las demás deben seguir pasando.
+```
 
 ```bash
 docker compose exec app uv run pytest
@@ -196,9 +209,11 @@ de ejemplo. Desde la aplicación **no hay forma de asignarla ni de cambiarle el 
 Pulsa `Shift+Tab` hasta que aparezca **plan mode**. En ese modo Claude investiga y propone,
 pero no edita nada hasta que apruebes. Empieza ahí:
 
-> Quiero poder asignar y reasignar una solicitud a un funcionario desde la página de
-> detalle. El cambio debe quedar registrado en la línea de tiempo, diciendo quién la
-> reasignó y a quién. Planifícalo de punta a punta.
+```
+Quiero poder asignar y reasignar una solicitud a un funcionario desde la página de detalle.
+El cambio debe quedar registrado en la línea de tiempo, diciendo quién la reasignó y a
+quién. Planifícalo de punta a punta.
+```
 
 Revisa el plan. Verifica que contemple:
 
@@ -280,10 +295,11 @@ Nadie te dice en qué tablas está eso. Así llegan los pedidos.
 
 Antes de pedir el reporte, pide la consulta:
 
-> Tengo conectada la base de datos `dbtest` por MCP. Explórala y escríbeme el SQL del
-> cuadro de honor de este semestre: los 5 mejores estudiantes por carrera, con código,
-> nombre, carrera y promedio. Solo el SQL, no me generes el reporte todavía. Explícame qué
-> decisiones tomaste.
+```
+Tengo conectada la base de datos dbtest por MCP. Explórala y escríbeme el SQL del cuadro de
+honor de este semestre: los 5 mejores estudiantes por carrera, con código, nombre, carrera
+y promedio. Solo el SQL, no me generes el reporte todavía. Explícame qué decisiones tomaste.
+```
 
 Léelo antes de correrlo. Deberías poder contestar estas tres preguntas mirando la consulta:
 
@@ -310,8 +326,10 @@ Son 6 carreras: tienen que salir 30 filas, 5 por carrera.
 
 Ya confías en la consulta, así que sáltate el paso manual:
 
-> Ejecuta esa consulta por MCP y guárdame el resultado en `reportes/cuadro_de_honor.csv`,
-> con una columna de puesto, ordenado por carrera y puesto.
+```
+Ejecuta esa consulta por MCP y guárdame el resultado en reportes/cuadro_de_honor.csv, con
+una columna de puesto, ordenado por carrera y puesto.
+```
 
 Ábrelo. Eso es lo que mandas el viernes.
 
@@ -331,7 +349,9 @@ Ya confías en la consulta, así que sáltate el paso manual:
 
 **Meta:** cerrar el círculo dejando el trabajo del taller en una rama con su commit.
 
-> Crea una rama con todo lo que hicimos hoy y haz commit con un mensaje descriptivo
+```
+Crea una rama con todo lo que hicimos hoy y haz commit con un mensaje descriptivo
+```
 
 ---
 
