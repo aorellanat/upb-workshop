@@ -9,8 +9,46 @@ resolverlos con Claude Code es exactamente el ejercicio.
 No hace falta que sepas FastAPI ni Oracle. Justamente de eso se trata: así es como llega
 un sistema que heredaste de otro equipo.
 
-Solo necesitas [Docker Desktop](https://www.docker.com/products/docker-desktop/). Nada más:
-todo corre dentro de un contenedor.
+---
+
+## Requisitos previos
+
+Instala estas tres herramientas antes de empezar. No necesitas nada más: la aplicación
+corre dentro de un contenedor.
+
+| Herramienta | Para qué | Descarga |
+|---|---|---|
+| Git | Clonar el repositorio y versionar tu trabajo | <https://git-scm.com/downloads> |
+| Visual Studio Code | Editar el código y leer los archivos del proyecto | <https://code.visualstudio.com/download> |
+| Docker Desktop | Levantar la base de datos y la aplicación | <https://www.docker.com/products/docker-desktop/> |
+
+Deja Docker Desktop abierto y corriendo antes del Ejercicio 0.
+
+### Instala Claude Code
+
+**macOS, Linux, WSL:**
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+**Windows (PowerShell):**
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+**Windows (CMD):**
+
+```
+curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+```
+
+Cierra y vuelve a abrir la terminal, y comprueba que quedó instalado:
+
+```bash
+claude --version
+```
 
 ---
 
@@ -33,6 +71,13 @@ todo corre dentro de un contenedor.
 ## Puesta en marcha
 
 **Meta:** tener la aplicación corriendo y Claude Code abierto en el proyecto.
+
+Clona el repositorio y entra en la carpeta:
+
+```bash
+git clone https://github.com/aorellanat/upb-workshop.git
+cd upb-workshop
+```
 
 Levanta la base de datos y la aplicación (la primera vez carga los datos de ejemplo sola):
 
