@@ -24,6 +24,32 @@ corre dentro de un contenedor.
 
 Deja Docker Desktop abierto y corriendo antes del Ejercicio 0.
 
+### Instala Claude Code
+
+**macOS, Linux, WSL:**
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+**Windows (PowerShell):**
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+**Windows (CMD):**
+
+```
+curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+```
+
+Cierra y vuelve a abrir la terminal, y comprueba que quedó instalado:
+
+```bash
+claude --version
+```
+
 ---
 
 ## Agenda
