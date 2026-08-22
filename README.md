@@ -449,7 +449,7 @@ claude mcp add --transport stdio dbtest -- npx -y @bytebase/dbhub \
 **Windows (PowerShell)**, en una sola línea:
 
 ```powershell
-claude mcp add --transport stdio dbtest -- npx -y @bytebase/dbhub --dsn 'postgresql://postgres:Alpaca24@research.upb.edu:5432/dbtest'
+claude mcp add --transport stdio dbtest -- cmd /c npx -y @bytebase/dbhub --dsn "postgresql://postgres:Alpaca24@research.upb.edu:5432/dbtest"
 ```
 
 Vuelve a abrir Claude Code (el mismo comando largo de **Puesta en marcha**) y verifica:
