@@ -121,6 +121,46 @@ Remove-Item Env:\ANTHROPIC_MODEL -ErrorAction SilentlyContinue; $env:ANTHROPIC_B
 Para usar el otro endpoint, cambia solo `ANTHROPIC_BASE_URL` (o `$env:ANTHROPIC_BASE_URL`)
 a `https://eu-begp.upb.edu/llmproxy`.
 
+### Opción de respaldo: DeepInfra directo
+
+Si el proxy o los Sparks fallan, conéctate directo a DeepInfra (sin pasar por Sparks ni
+proxy). Usa cualquiera de estas 4 líneas, cada una con su propia clave para repartir la
+carga entre varias personas:
+
+```bash
+ANTHROPIC_BASE_URL=https://api.deepinfra.com/anthropic ANTHROPIC_AUTH_TOKEN=TRkrAgPq02IoNsOp9o0QKvrhHZ6WgjSp ANTHROPIC_MODEL=Qwen/Qwen3.8-27B ANTHROPIC_DEFAULT_HAIKU_MODEL=Qwen/Qwen3.8-27B CLAUDE_CODE_MAX_OUTPUT_TOKENS=16384 CLAUDE_CODE_EFFORT_LEVEL=low CLAUDE_CODE_ALWAYS_ENABLE_EFFORT=1 claude
+```
+
+```bash
+ANTHROPIC_BASE_URL=https://api.deepinfra.com/anthropic ANTHROPIC_AUTH_TOKEN=E95fhmOpflsE6FebZ7uyVdA00gUEA0LB ANTHROPIC_MODEL=Qwen/Qwen3.8-27B ANTHROPIC_DEFAULT_HAIKU_MODEL=Qwen/Qwen3.8-27B CLAUDE_CODE_MAX_OUTPUT_TOKENS=16384 CLAUDE_CODE_EFFORT_LEVEL=low CLAUDE_CODE_ALWAYS_ENABLE_EFFORT=1 claude
+```
+
+```bash
+ANTHROPIC_BASE_URL=https://api.deepinfra.com/anthropic ANTHROPIC_AUTH_TOKEN=LEnepXMYNK2ABQmALZi1v964EFUZv7Qe ANTHROPIC_MODEL=Qwen/Qwen3.8-27B ANTHROPIC_DEFAULT_HAIKU_MODEL=Qwen/Qwen3.8-27B CLAUDE_CODE_MAX_OUTPUT_TOKENS=16384 CLAUDE_CODE_EFFORT_LEVEL=low CLAUDE_CODE_ALWAYS_ENABLE_EFFORT=1 claude
+```
+
+```bash
+ANTHROPIC_BASE_URL=https://api.deepinfra.com/anthropic ANTHROPIC_AUTH_TOKEN=5iTYRrsnEvfkP8sYgqQRy3ScPkcog6S2 ANTHROPIC_MODEL=Qwen/Qwen3.8-27B ANTHROPIC_DEFAULT_HAIKU_MODEL=Qwen/Qwen3.8-27B CLAUDE_CODE_MAX_OUTPUT_TOKENS=16384 CLAUDE_CODE_EFFORT_LEVEL=low CLAUDE_CODE_ALWAYS_ENABLE_EFFORT=1 claude
+```
+
+**Windows (PowerShell)**, la misma opción de respaldo, una línea por clave:
+
+```powershell
+$env:ANTHROPIC_BASE_URL="https://api.deepinfra.com/anthropic"; $env:ANTHROPIC_AUTH_TOKEN="TRkrAgPq02IoNsOp9o0QKvrhHZ6WgjSp"; $env:ANTHROPIC_MODEL="Qwen/Qwen3.8-27B"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="Qwen/Qwen3.8-27B"; $env:CLAUDE_CODE_MAX_OUTPUT_TOKENS="16384"; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
+```
+
+```powershell
+$env:ANTHROPIC_BASE_URL="https://api.deepinfra.com/anthropic"; $env:ANTHROPIC_AUTH_TOKEN="E95fhmOpflsE6FebZ7uyVdA00gUEA0LB"; $env:ANTHROPIC_MODEL="Qwen/Qwen3.8-27B"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="Qwen/Qwen3.8-27B"; $env:CLAUDE_CODE_MAX_OUTPUT_TOKENS="16384"; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
+```
+
+```powershell
+$env:ANTHROPIC_BASE_URL="https://api.deepinfra.com/anthropic"; $env:ANTHROPIC_AUTH_TOKEN="LEnepXMYNK2ABQmALZi1v964EFUZv7Qe"; $env:ANTHROPIC_MODEL="Qwen/Qwen3.8-27B"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="Qwen/Qwen3.8-27B"; $env:CLAUDE_CODE_MAX_OUTPUT_TOKENS="16384"; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
+```
+
+```powershell
+$env:ANTHROPIC_BASE_URL="https://api.deepinfra.com/anthropic"; $env:ANTHROPIC_AUTH_TOKEN="5iTYRrsnEvfkP8sYgqQRy3ScPkcog6S2"; $env:ANTHROPIC_MODEL="Qwen/Qwen3.8-27B"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="Qwen/Qwen3.8-27B"; $env:CLAUDE_CODE_MAX_OUTPUT_TOKENS="16384"; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
+```
+
 ### Primer prompt
 
 Con Claude Code ya abierto, puedes probar:
