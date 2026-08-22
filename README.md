@@ -16,16 +16,17 @@ todo corre dentro de un contenedor.
 
 ## Agenda
 
-| # | Bloque |
+| Bloque | Contenido |
 |---|---|
-| 0 | Puesta en marcha |
-| 1 | Entender código que no escribiste |
-| 2 | CLAUDE.md |
-| 3 | Encontrar un bug de verdad |
-| 4 | Una funcionalidad de punta a punta |
-| 5 | Revisión de código |
-| 6 | Conectar Claude a la base de datos (MCP) |
-| 7 | Git |
+| Puesta en marcha | Levantar la aplicación y conectar Claude Code |
+| Primeros pasos con Claude | Entender código nuevo, documentarlo, refactorizarlo, limpiar valores hardcodeados y arreglar un bug |
+| Ejercicio 1 | `CLAUDE.md` |
+| Ejercicio 2 | Crear y usar una skill |
+| Ejercicio 3 | Crear y usar un comando |
+| Ejercicio 4 | Una funcionalidad de punta a punta (planning) |
+| Ejercicio 5 | Revisión de código del feature implementado |
+| Ejercicio 6 | Conectar Claude a la base de datos (MCP) |
+| Cierre | Dejar el trabajo en una rama con commit (Git) |
 
 ---
 
@@ -88,16 +89,26 @@ archivos.
 
 ---
 
-## Ejercicio 0 - Entender código que no escribiste
+## Primeros pasos con Claude
 
-**Meta:** usar Claude Code como la herramienta que más vas a usar en el trabajo real:
-entender un módulo que nadie documentó.
+**Meta:** pasar por el flujo básico de trabajar con Claude Code sobre código ajeno, antes de
+meterte a los ejercicios grandes: entenderlo, documentarlo, dejarlo más legible, sacarle los
+valores hardcodeados y arreglarle un bug.
 
-Abre `src/portal/servicios/tiempos_atencion.py` y míralo unos segundos. Pruebas a hacer:
+### Preguntar sobre un código que nunca viste
+
+Usa Claude Code para entender un módulo que nadie documentó.
+
+Abre `src/portal/servicios/tiempos_atencion.py` y míralo unos segundos. Después:
 
 ```
 Explícame qué hace src/portal/servicios/tiempos_atencion.py
 ```
+
+**Qué observar:** Claude puede explicar el código antes de que tú lo entiendas del todo. Es
+el punto de partida para todo lo que sigue en este bloque.
+
+### Documentar funciones
 
 Y recién ahora, que ya entendiste el módulo:
 
@@ -105,9 +116,75 @@ Y recién ahora, que ya entendiste el módulo:
 Agrégale comentarios a tiempos_atencion.py, explicando cada función y las constantes
 ```
 
+**Qué observar:** documentar antes de tocar el código te obliga a confirmar que entendiste
+bien. Si algo del comentario que propone Claude no te cierra, es señal de que hay que
+preguntar más antes de seguir.
+
+### Refactorizar código
+
+**Meta:** mejorar la legibilidad de un código que ya entendiste, sin alterar lo que hace.
+Esa es la disciplina básica de cualquier refactor.
+
+Nombres como `HI`, `HF`, `FF`, `_v`, `d`, `u`, `r`, `t0`, `t1` tienen sentido para quien lo
+escribió. Para todos los demás, no.
+
+Antes de tocar nada, abre cualquier solicitud abierta en el navegador y anota lo que
+muestra el recuadro de **SLA**: horas transcurridas y porcentaje consumido. Vas a comparar
+contra esto después.
+
+```
+Refactoriza src/portal/servicios/tiempos_atencion.py: dale nombres claros a las variables y
+funciones, y ordena la lógica en pasos entendibles. No cambies ninguna regla de negocio ni
+ningún resultado de cálculo, solo la legibilidad.
+```
+
+Recarga esa misma solicitud y compara el SLA contra lo que anotaste. Tiene que ser idéntico.
+
+### Buenas prácticas: limpieza de variables hardcodeadas
+
+```
+Revisa src/portal/config.py. bd_clave tiene una contraseña como valor por defecto en el
+código fuente. Corrígelo: la credencial no debería tener un valor por defecto en el código,
+sino leerse desde un archivo .env.
+```
+
+Antes de aceptar el cambio, confirma que `docker compose up` sigue funcionando igual: las
+credenciales ya le llegan por variables de entorno desde `docker-compose.yml`, así que
+sacarlas del código no debería romper nada.
+
+### Describir un bug y arreglarlo
+
+#### El reporte
+
+Llega este ticket a la mesa de ayuda:
+
+> «El panel de control no cuadra: el total de solicitudes es mucho más alto que lo que
+> suman abiertas y cerradas.»
+
+#### Reproducirlo
+
+Abre el panel (`http://localhost:8000`) y mira las cuatro tarjetas de arriba: **Total**,
+**Abiertas**, **Vencidas**, **Cerradas**. Suma Abiertas + Cerradas a mano y compárala con
+Total.
+
+#### Diagnosticarlo
+
+```
+En el panel de control, el número de "Total" no coincide con la suma de "Abiertas" más
+"Cerradas". Investiga por qué. No corrijas nada todavía, primero explícame la causa.
+```
+
+Cuando estés de acuerdo con el diagnóstico:
+
+```
+Corrígelo.
+```
+
+Recarga el panel y confirma que Abiertas + Cerradas ahora sí coincide con Total.
+
 ---
 
-## Ejercicio 2 - CLAUDE.md
+## Ejercicio 1 - CLAUDE.md
 
 **Meta:** fijar los estándares del equipo en un archivo, en vez de repetírselos a Claude
 en cada sesión.
@@ -130,66 +207,53 @@ Revisa lo que propone.
 
 ---
 
-## Ejercicio 3 - Encontrar un bug de verdad
+## Ejercicio 2 - Crear y usar una skill
 
-**Meta:** ir de un síntoma a una causa raíz, con una prueba que lo demuestre.
+**Meta:** empaquetar un procedimiento que se repite en una **skill**, para no tener que
+explicárselo a Claude de cero cada vez.
 
-### El reporte
-
-Llega este ticket a la mesa de ayuda:
-
-> «El panel dice que tenemos 20 solicitudes con SLA vencido, pero yo conté más a mano.
-> Y hay solicitudes que muestran tiempo transcurrido **negativo**.»
-
-### Reproducirlo
-
-En el navegador, escribe `-015` en el buscador del listado. Salen las últimas seis
-solicitudes, cuyos códigos terminan en `0151` a `0156`. Abre cualquiera de ellas y mira el
-recuadro de **SLA** en la columna derecha.
-
-Anota lo que ves antes de seguir.
-
-### Diagnosticarlo
+Dirección Académica pide seguido un reporte en PDF de los problemas del panel —las
+solicitudes vencidas y en riesgo— y hasta ahora alguien tiene que armarlo a mano cada vez:
+copiar los datos, pegar el logo, acomodar el formato. Es el tipo de pedido que conviene
+empaquetar, no formatear de nuevo cada vez.
 
 ```
-En la solicitud <PEGA AQUÍ EL CÓDIGO> el tiempo transcurrido sale negativo, y las horas
-restantes son más que el límite de la categoría. Investiga por qué pasa esto. No corrijas
-nada todavía, primero explícame la causa.
+Crea una skill llamada reporte-pdf. Cuando le pida un reporte de los problemas del panel de
+control, debe generar un PDF con las solicitudes vencidas y en riesgo, agrupadas por
+categoría. El PDF siempre debe llevar el logo de src/portal/assets/upb-logo.png y decir
+"Universidad Privada Boliviana", sin que yo tenga que pedirlo cada vez.
 ```
 
-Pon el código y el valor exacto que ves en pantalla: mientras más concreto el síntoma,
-mejor el diagnóstico.
+Revisa el archivo que crea Claude (algo como `.claude/skills/reporte-pdf/SKILL.md`): fíjate
+en la descripción, que es lo que Claude usa para decidir cuándo activarla sola. El proyecto
+ya trae instalada `fpdf2` para armar el PDF.
 
-Cuando estés de acuerdo con el diagnóstico:
-
-```
-Escribe una prueba en tests/test_tiempos_atencion.py que falle por este bug. Solo la prueba.
-```
-
-Córrela y confirma que falla:
-
-```bash
-docker compose exec app uv run pytest tests/test_tiempos_atencion.py -v
-```
-
-### Corregirlo
+Úsala:
 
 ```
-Ahora corrige el bug. La prueba debe pasar y las demás deben seguir pasando.
+/reporte-pdf
 ```
 
-```bash
-docker compose exec app uv run pytest
+Abre el PDF que genera y confirma que el logo y el nombre de la universidad están ahí.
+
+---
+
+## Ejercicio 3 - Crear y usar un comando
+
+**Meta:** crear un **comando** para una acción puntual que tú mismo disparas, a diferencia
+de la skill del ejercicio anterior, que Claude decide cuándo usar.
+
+```
+Crea un comando /documentar que reciba la ruta de un script como argumento y le agregue
+documentación: qué hace el archivo, qué hace cada función, y qué reciben y devuelven.
 ```
 
-Recarga el navegador y vuelve a mirar la solicitud y el panel.
+Revisa el archivo que crea Claude (algo como `.claude/commands/documentar.md`). Úsalo sobre
+un script que todavía no tiene mucha documentación:
 
-**Qué observar:**
-- Darle el síntoma concreto («horas transcurridas negativas en esta solicitud») rinde
-  mucho más que «el plazo de atención está mal».
-- Pedir la prueba **antes** que la corrección demuestra que el bug existe y que quedó
-  resuelto. Sin eso, solo tienes la palabra del modelo.
-- Compara el conteo de «SLA vencido» del panel antes y después.
+```
+/documentar src/portal/inicializar_bd.py
+```
 
 ---
 
@@ -233,12 +297,10 @@ Apruébalo y déjalo trabajar. Después pruébalo en el navegador de verdad.
 
 ---
 
-## Ejercicio 5 - Revisión de código
+## Ejercicio 5 - Revisión de código del feature implementado
 
-**Meta:** revisar el código automáticamente y decidir qué hallazgos vale la
-pena corregir.
-
-### Revisiones
+**Meta:** revisar automáticamente lo que acabas de construir en el ejercicio anterior y
+decidir qué hallazgos vale la pena corregir.
 
 ```
 /code-review
@@ -273,7 +335,7 @@ claude mcp add --transport stdio dbtest -- npx -y @bytebase/dbhub \
 claude mcp add --transport stdio dbtest -- npx -y @bytebase/dbhub --dsn 'postgresql://postgres:lp83%3Ce9QR%5C%3DW@eu-begp.upb.edu:5433/dbtest'
 ```
 
-Vuelve a abrir Claude Code (el mismo comando largo del Ejercicio 0) y verifica:
+Vuelve a abrir Claude Code (el mismo comando largo de **Puesta en marcha**) y verifica:
 
 ```
 /mcp
@@ -345,7 +407,7 @@ una columna de puesto, ordenado por carrera y puesto.
 
 ---
 
-## Ejercicio 7 - Git
+## Cierre - Git
 
 **Meta:** cerrar el círculo dejando el trabajo del taller en una rama con su commit.
 

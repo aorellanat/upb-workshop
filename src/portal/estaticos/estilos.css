@@ -92,14 +92,10 @@ body {
     color: inherit;
 }
 
-.marca__sigla {
-    background: var(--color-marca);
-    color: #fff;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    padding: 4px 9px;
-    border-radius: 6px;
-    font-size: 13px;
+.marca__logo {
+    height: 34px;
+    width: auto;
+    display: block;
 }
 
 .marca__texto { font-weight: 600; }

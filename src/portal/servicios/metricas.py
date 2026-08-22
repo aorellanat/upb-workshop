@@ -15,6 +15,7 @@ from portal.modelos import MetricasPanel
 from portal.servicios.tiempos_atencion import calcular_sla
 
 ESTADOS_ABIERTOS = ("RECIBIDA", "EN_REVISION", "EN_PROCESO")
+ESTADOS_CERRADOS = ("RESUELTA", "CERRADA", "RECHAZADA")
 
 
 async def _conteo_por_columna(columna: str) -> dict[str, int]:
@@ -106,12 +107,17 @@ async def obtener_metricas() -> MetricasPanel:
     vencidas, en_riesgo = await _conteo_sla_abiertas()
 
     abiertas = sum(por_estado.get(estado, 0) for estado in ESTADOS_ABIERTOS)
-    total = sum(por_estado.values())
+    cerradas = sum(por_estado.get(estado, 0) for estado in ESTADOS_CERRADOS)
+    total = (
+        sum(por_estado.values())
+        + sum(por_prioridad.values())
+        + sum(fila["total"] for fila in por_categoria)
+    )
 
     return MetricasPanel(
         total=total,
         abiertas=abiertas,
-        cerradas=total - abiertas,
+        cerradas=cerradas,
         vencidas=vencidas,
         en_riesgo=en_riesgo,
         por_estado=por_estado,

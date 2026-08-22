@@ -22,6 +22,7 @@ logging.basicConfig(
 )
 
 DIRECTORIO_ESTATICOS = Path(__file__).resolve().parent / "estaticos"
+DIRECTORIO_ASSETS = Path(__file__).resolve().parent / "assets"
 
 
 @asynccontextmanager
@@ -48,6 +49,7 @@ app = FastAPI(
 )
 
 app.mount("/estaticos", StaticFiles(directory=str(DIRECTORIO_ESTATICOS)), name="estaticos")
+app.mount("/assets", StaticFiles(directory=str(DIRECTORIO_ASSETS)), name="assets")
 
 app.include_router(vistas.router)
 app.include_router(solicitudes.router)
