@@ -86,7 +86,7 @@ claude --version
 | Ejercicio 4 | Una funcionalidad de punta a punta (planning) |
 | Ejercicio 5 | Revisión de código del feature implementado |
 | Ejercicio 6 | Conectar Claude a la base de datos (MCP) |
-| Cierre | Dejar el trabajo en una rama con commit (Git) |
+| Cierre | Dejar el trabajo en una rama con commit (Git, opcional) y apagar los contenedores |
 
 ---
 
@@ -537,12 +537,22 @@ una columna de puesto, ordenado por carrera y puesto.
 
 ---
 
-## Cierre - Git
+## Cierre
+
+### Git (opcional, si te queda tiempo)
 
 **Meta:** cerrar el círculo dejando el trabajo del taller en una rama con su commit.
 
 ```
 Crea una rama con todo lo que hicimos hoy y haz commit con un mensaje descriptivo
+```
+
+### Apagar los contenedores
+
+Termines o no el paso anterior, cierra el taller apagando los contenedores:
+
+```bash
+docker compose down
 ```
 
 ---
