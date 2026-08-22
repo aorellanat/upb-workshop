@@ -187,7 +187,7 @@ claude
 **Windows (PowerShell):**
 
 ```powershell
-Remove-Item Env:\ANTHROPIC_MODEL -ErrorAction SilentlyContinue; $env:ANTHROPIC_BASE_URL="http://research.upb.edu:8317"; $env:ANTHROPIC_AUTH_TOKEN="sk-DfyNPtUPMiLnctlPfazM8YLNwPyqKh1tQZRWiA4Wu7af3KPY"; $env:ANTHROPIC_DEFAULT_OPUS_MODEL="claude-sonnet-5"; $env:ANTHROPIC_DEFAULT_SONNET_MODEL="claude-sonnet-5"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="claude-sonnet-5"; $env:API_TIMEOUT_MS="120000"; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
+Remove-Item Env:\ANTHROPIC_MODEL -ErrorAction SilentlyContinue; Remove-Item Env:\CLAUDE_CODE_EXTRA_BODY -ErrorAction SilentlyContinue; $env:ANTHROPIC_BASE_URL="http://research.upb.edu:8317"; $env:ANTHROPIC_AUTH_TOKEN="sk-DfyNPtUPMiLnctlPfazM8YLNwPyqKh1tQZRWiA4Wu7af3KPY"; $env:ANTHROPIC_DEFAULT_OPUS_MODEL="claude-sonnet-5"; $env:ANTHROPIC_DEFAULT_SONNET_MODEL="claude-sonnet-5"; $env:ANTHROPIC_DEFAULT_HAIKU_MODEL="claude-sonnet-5"; $env:API_TIMEOUT_MS="120000"; $env:CLAUDE_CODE_EFFORT_LEVEL="low"; $env:CLAUDE_CODE_ALWAYS_ENABLE_EFFORT="1"; claude
 ```
 
 Para usar el otro endpoint, cambia solo `ANTHROPIC_BASE_URL` (o `$env:ANTHROPIC_BASE_URL`)
